@@ -1,23 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+
+import Count from "./components/Count";
+
+import CreateInput from "./components/CreateInput";
+
+import Note from "./components/Note";
+
+import Footer from "./components/Footer";
+
+import {useState} from 'react'
+
 
 function App() {
+  
+  const [note,setNote] = useState([])
+
+  const addNote = (newNote) =>{
+
+    setNote((preValue)=>{
+
+      return [...preValue,newNote]
+
+    })
+
+  }
+
+
+  const deleteNote= (id)=>{
+
+    setNote((preValue)=>{
+
+      return [...preValue.filter((note,index)=> index !== id)]
+
+    })
+
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Header/>
+      <Count count={note.length === 0 ? 'Empty' : `Showing ${note.length} notes`}/>
+      <CreateInput onAdd={addNote}/>
+      {
+        note.map((note,index)=>{
+
+          return <Note
+          key={index}
+          id={index}
+          title={note.title}
+          content={note.content}
+          onDelete={deleteNote}
+          />
+
+        })
+      }
+      
+      <Footer/>
     </div>
   );
 }
